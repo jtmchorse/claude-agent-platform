@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Claude Agent Platform" width="800" />
+  <img src="assets/claude-agent-platform-banner.png" alt="Claude Agent Platform" width="800" />
 </p>
 
 <h3 align="center">
