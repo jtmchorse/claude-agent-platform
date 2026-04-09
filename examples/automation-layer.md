@@ -20,7 +20,7 @@ This layer handles everything that should happen without a human in the chair.
 ├─────────────────────────────────────────┤
 │  Categories:                             │
 │  - Morning briefing (7 sub-workflows)    │
-│  - Signal classification (5 workflows)   │
+│  - Event classification (5 workflows)    │
 │  - Communication bridges (5 workflows)   │
 │  - Intelligence digests (7 workflows)    │
 │  - Monitoring (6 workflows)              │
@@ -47,21 +47,19 @@ One parent workflow dispatches 6 sub-workflows in parallel, each fetching from a
 
 All 6 run simultaneously. Results merge into a formatted briefing delivered via push notification. Total execution: ~30 seconds.
 
-### Signal Classification Pipeline
+### Event Classification Pipeline
 
-Events from communication channels get auto-classified into structured categories:
+Service events and webhook payloads get auto-classified and routed:
 
 ```
-Chat transcripts ──────┐
-Code review activity ───┤
-Ticket transitions ─────┼──→ AI classifier ──→ Structured tracker
-Meeting notes ──────────┤                      (categorized by type)
-Commit analysis ────────┘
+Container events ───────┐
+Webhook payloads ───────┤
+Service health checks ──┼──→ Classifier ──→ Structured log
+Cron job results ───────┤                    (categorized by type)
+API callbacks ──────────┘
 ```
 
-The classifier tags each signal by type and appends it to a structured tracker. A weekly extraction workflow summarizes signals into a review format.
-
-This runs continuously. Every code review, every meeting, every ticket transition is evaluated and classified without manual effort.
+The classifier tags each event by type and severity, appends it to a structured log, and routes high-priority events to push notifications. A weekly extraction summarizes patterns.
 
 ### Intelligence Digests
 
@@ -76,9 +74,8 @@ Automated synthesis of information streams:
 Threshold-based alerts and periodic health checks:
 
 - **System Health**: Service availability, container status, disk usage
-- **Overwork Sentinel**: Alerts when session hours exceed sustainable thresholds
-- **Budget Reset**: Monthly financial checkpoint
-- **Weekend Brief**: Friday synthesis of the week + weekend prep
+- **Resource Alerts**: CPU, memory, and storage thresholds across containers
+- **Weekend Brief**: Friday synthesis of the week + upcoming maintenance windows
 
 ## The Connection Between Layers
 

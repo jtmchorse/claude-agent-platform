@@ -271,15 +271,15 @@ Each follows the same pattern: clear purpose, defined inputs/outputs, failure mo
 
 ## The Automation Layer
 
-The skills above are the interactive side. Behind them: **84 automated workflows** running 24/7 on a self-hosted n8n instance, handling everything that should happen without a human in the chair.
+The skills above are the interactive side. Behind them: **60+ automated workflows** running 24/7 on a self-hosted n8n instance, handling everything that should happen without a human in the chair.
 
 | Workflow Family | Count | What It Does |
 |---|---|---|
 | Morning Briefing | 7 | 6 parallel data sources (weather, meals, calendar, tasks, project metrics, health) merged into one briefing |
-| Signal Classification | 5 | Auto-classifies events from communication channels into structured categories |
+| Event Classification | 5 | Routes webhook and service events into categories for downstream processing |
 | Communication Bridges | 5 | Gmail, Google Drive, Dropbox, Calendar sync to local systems |
 | Intelligence Digests | 7 | Daily dev news, weekly meeting summaries, notification routing |
-| Monitoring | 6 | Threshold alerts, periodic health checks, budget resets |
+| Monitoring | 6 | Service health alerts, container status, disk usage thresholds |
 | Infrastructure | 5 | System health, session indexing, decision decay tracking |
 | Knowledge/Content | 8 | Vault Q&A, domain-specific RAG, book requests, media requests |
 
@@ -316,7 +316,7 @@ That's the problem I want to solve next.
 
 ## About
 
-I'm a fullstack engineer (React/TypeScript/Node.js/AWS) who built this system across 400+ Claude Code sessions to solve a real problem: managing infrastructure, research, and operations across dozens of tools and APIs without losing context between sessions.
+I'm a fullstack engineer (React/TypeScript/Node.js/AWS) who built this system over six months across 400+ Claude Code sessions to solve a real problem: managing homelab infrastructure, research, and operations across dozens of tools and APIs without losing context between sessions.
 
 The patterns here aren't theoretical. Each one emerged from a real failure, got encoded into the system, and has been running in production for months. The compound loop architecture, the parallel agent dispatch model, the context engineering approach -- these are extracted from a working system I operate daily.
 
@@ -347,7 +347,7 @@ claude-agent-platform/
 ├── examples/
 │   ├── CLAUDE.md                      # Genericized operational principles
 │   ├── memory-architecture.md         # 3-layer shared state design
-│   └── automation-layer.md            # 84 n8n workflows: the always-on layer
+│   └── automation-layer.md            # 60+ n8n workflows: the always-on layer
 └── assets/
     └── claude-agent-platform-banner.png
 ```
