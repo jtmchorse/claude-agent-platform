@@ -23,13 +23,11 @@
 
 ---
 
-> **Meta**: The company research that inspired this repo was itself conducted by this platform — 4 parallel research agents, 150+ web sources, synthesized in under 3 minutes. The system is the proof.
-
 ---
 
 ## The Problem
 
-Managing infrastructure, career tracking, research, and daily operations means juggling dozens of tools, APIs, and manual workflows. A single AI prompt can help with one task. But real work is **multi-step, multi-source, and needs to remember what it learned**.
+Managing infrastructure, projects, research, and daily operations means juggling dozens of tools, APIs, and manual workflows. A single AI prompt can help with one task. But real work is **multi-step, multi-source, and needs to remember what it learned**.
 
 I started with one big prompt. Six months later, it's a platform.
 
@@ -55,17 +53,17 @@ I started with one big prompt. Six months later, it's a platform.
      Show: the agent dispatch messages, parallel execution, synthesis, file write confirmation
      File: assets/demo-research.gif -->
 
-> `/research lago billing platform` → dispatches 4 agents (Practitioner, Skeptic, Economist, Historian) → each searches 2-3 queries → reads top sources → returns structured findings with trust scores → parent deduplicates, flags contradictions, synthesizes → saves to vault
+> `/research open-source billing platforms` → dispatches 4 agents (Practitioner, Skeptic, Economist, Historian) → each searches 2-3 queries → reads top sources → returns structured findings with trust scores → parent deduplicates, flags contradictions, synthesizes → saves to vault
 
 ### Morning Briefing: 6 Sources in Parallel
 
-<!-- DEMO: /briefing command fetching weather, meals, calendar, infra health, career, tasks
+<!-- DEMO: /briefing command fetching weather, meals, calendar, infra health, projects, tasks
      all in parallel, formatted output appearing section by section.
      Target: ~30s asciinema recording or GIF
      Show: parallel MCP tool calls firing, data returning, clean formatted output
      File: assets/demo-briefing.gif -->
 
-> `/briefing` → fetches weather, meals, meetings, infrastructure health, career metrics, open tasks — all in parallel → formats into a scannable morning summary
+> `/briefing` → fetches weather, meals, meetings, infrastructure health, project metrics, open tasks — all in parallel → formats into a scannable morning summary
 
 ### Self-Improvement: Learning → System Patch
 
@@ -264,20 +262,67 @@ Every MCP tool wraps an API. When the tool returns unexpected results, drop to t
 <details>
 <summary><strong>The other 38 skills</strong></summary>
 
-Deployment, infrastructure auditing, service health checks, container management, backup orchestration, bookmark digestion, book pipeline management, knowledge graph export, daily planning reviews, career tracking, meeting prep, product research, life reviews, service onboarding, configuration auditing, PR review, feature scaffolding, shipping workflows, log viewing, messaging, and more.
+Deployment, infrastructure auditing, service health checks, container management, backup orchestration, bookmark digestion, book pipeline management, knowledge graph export, daily planning reviews, project tracking, meeting prep, product research, service onboarding, configuration auditing, PR review, feature scaffolding, shipping workflows, log viewing, messaging, and more.
 
 Each follows the same pattern: clear purpose, defined inputs/outputs, failure modes documented, composable through shared state.
 </details>
 
 ---
 
+## The Automation Layer
+
+The skills above are the interactive side. Behind them: **84 automated workflows** running 24/7 on a self-hosted n8n instance, handling everything that should happen without a human in the chair.
+
+| Workflow Family | Count | What It Does |
+|---|---|---|
+| Morning Briefing | 7 | 6 parallel data sources (weather, meals, calendar, tasks, project metrics, health) merged into one briefing |
+| Signal Classification | 5 | Auto-classifies events from communication channels into structured categories |
+| Communication Bridges | 5 | Gmail, Google Drive, Dropbox, Calendar sync to local systems |
+| Intelligence Digests | 7 | Daily dev news, weekly meeting summaries, notification routing |
+| Monitoring | 6 | Threshold alerts, periodic health checks, budget resets |
+| Infrastructure | 5 | System health, session indexing, decision decay tracking |
+| Knowledge/Content | 8 | Vault Q&A, domain-specific RAG, book requests, media requests |
+
+The two layers share state through the vault, knowledge graph, and MCP tools. A signal captured by an automated workflow at 3am shows up in the morning briefing at 7am and surfaces in the Claude Code session at 9am.
+
+> See [automation-layer.md](examples/automation-layer.md) for the full architecture.
+
+---
+
+## Design Patterns
+
+Reusable architectural patterns extracted from building this system:
+
+| Pattern | Problem It Solves | Doc |
+|---|---|---|
+| [Compound Loop](patterns/compound-loop.md) | Sessions don't learn from each other | Self-improving feedback: capture, classify, apply, review |
+| [Parallel Agent Dispatch](patterns/parallel-agent-dispatch.md) | Research is slow and expensive | Cheap models gather, expensive models decide |
+| [Session Hooks](patterns/session-hooks.md) | Agents forget safety rules | Lifecycle hooks enforce behavior mechanically |
+| [Context Engineering](patterns/context-engineering.md) | Context windows fill up fast | 3-layer architecture: graph, documents, session memory |
+
+These patterns aren't theoretical. Each one emerged from a real failure in this system and has been running in production for months.
+
+---
+
 ## What I'd Build Next
 
-Everything here is single-operator. The hardest unsolved problem is **multi-user coordination** — different people with different permissions, different views, different triggers, sharing the same state layer.
+Everything here is single-operator. The hardest unsolved problem is **multi-user coordination** -- different people with different permissions, different views, different triggers, sharing the same state layer.
 
 The foundation supports it: composable skills, tiered orchestration, external shared state, self-improvement loops. What's missing is the coordination layer that lets a team of humans interact with a team of agents.
 
 That's the problem I want to solve next.
+
+---
+
+## About
+
+I'm a fullstack engineer (React/TypeScript/Node.js/AWS) who built this system across 400+ Claude Code sessions to solve a real problem: managing infrastructure, research, and operations across dozens of tools and APIs without losing context between sessions.
+
+The patterns here aren't theoretical. Each one emerged from a real failure, got encoded into the system, and has been running in production for months. The compound loop architecture, the parallel agent dispatch model, the context engineering approach -- these are extracted from a working system I operate daily.
+
+If these patterns are interesting to you, I'd enjoy the conversation.
+
+[LinkedIn](https://www.linkedin.com/in/jtmchorse/) | jmchorse@gmail.com
 
 ---
 
@@ -286,26 +331,29 @@ That's the problem I want to solve next.
 ```
 claude-agent-platform/
 ├── README.md                          # You are here
-├── ARCHITECTURE.md                    # Full narrative: monolith → platform
+├── ARCHITECTURE.md                    # Full narrative: monolith -> platform
+├── patterns/
+│   ├── compound-loop.md               # Self-improving feedback architecture
+│   ├── parallel-agent-dispatch.md     # Tiered model selection for multi-agent work
+│   ├── session-hooks.md               # Lifecycle hooks as behavioral guardrails
+│   └── context-engineering.md         # 3-layer context management architecture
 ├── skills/
 │   ├── research/SKILL.md              # Parallel subagents, trust scoring
 │   ├── briefing/SKILL.md              # Parallel fetch, graceful degradation
 │   ├── end-session/SKILL.md           # Learning capture, self-improvement entry
-│   ├── learning-extractor/SKILL.md    # Learning → system patch classification
-│   ├── retro/SKILL.md                 # Monthly friction → protocol
+│   ├── learning-extractor/SKILL.md    # Learning -> system patch classification
+│   ├── retro/SKILL.md                 # Monthly friction -> protocol
 │   └── focus/SKILL.md                 # Timed sprints, escalating boundaries
 ├── examples/
 │   ├── CLAUDE.md                      # Genericized operational principles
-│   └── memory-architecture.md         # 3-layer shared state design
+│   ├── memory-architecture.md         # 3-layer shared state design
+│   └── automation-layer.md            # 84 n8n workflows: the always-on layer
 └── assets/
-    ├── banner.png                     # Repo banner
-    ├── demo-research.gif              # Research skill demo
-    ├── demo-briefing.gif              # Briefing skill demo
-    └── demo-self-improvement.gif      # Learning loop demo
+    └── claude-agent-platform-banner.png
 ```
 
 ---
 
 <p align="center">
-  <sub>Built with <a href="https://claude.ai/code">Claude Code</a>, 5 MCP servers, and a Supermicro 1U that refuses to quit.</sub>
+  <sub>Built across 400+ sessions with <a href="https://claude.ai/code">Claude Code</a>, 5 MCP servers, 60+ n8n workflows, and a Supermicro 1U that refuses to quit.</sub>
 </p>

@@ -18,7 +18,7 @@ Entities and relations stored via MCP memory server. Used for:
 Markdown files organized by PARA method (Projects, Areas, Resources, Archives):
 - Research reports with trust-scored sources
 - Daily notes with focus session logs
-- Career tracking (brag doc, trajectory, 1:1 prep)
+- Project tracking and progress documentation
 - Shared reports for cross-session work
 
 **Written by:** `/research`, `/briefing`, `/focus`, subagents
@@ -62,4 +62,4 @@ Session ends (/end-session)
 - **Vault** is easy to write but slow to search exhaustively. Good for detailed documents and reports.
 - **Session memory** is tiny but always present. Good for routing decisions and preferences.
 
-A research agent doesn't need your full career trajectory — it needs to know where to save its report. Session memory handles that. A retro skill needs all your decisions from the past month — the knowledge graph handles that. A briefing skill needs today's meal plan — the vault handles that.
+A research agent doesn't need your full project history — it needs to know where to save its report. Session memory handles that. A retro skill needs all your decisions from the past month — the knowledge graph handles that. A briefing skill needs today's meal plan — the vault handles that.

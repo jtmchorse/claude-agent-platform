@@ -4,7 +4,7 @@
 
 I run a homelab — a Supermicro 1U server with Proxmox, 14 containers, and a growing stack of services. About six months ago I started using Claude Code to manage it. What started as "run some commands on containers" turned into something much more interesting: a production-grade multi-agent platform with 44 composable skills, 5 MCP servers exposing 110+ tools, and a self-improving feedback loop that makes the system smarter every session.
 
-I'm not a startup. I'm one person managing home infrastructure, a career, a family, and a dozen side projects. But the engineering problems I solved are the same ones any team building internal AI agents will face: how do you decompose monolithic prompts? How do you orchestrate multiple agents? How do you build systems that learn from their own mistakes?
+I'm not a startup. I'm one person managing home infrastructure, a family, and a dozen side projects. But the engineering problems I solved are the same ones any team building internal AI agents will face: how do you decompose monolithic prompts? How do you orchestrate multiple agents? How do you build systems that learn from their own mistakes?
 
 Here's what I built, what broke, and what I'd do differently.
 
@@ -20,7 +20,7 @@ I broke the monolith into discrete, composable skills — each with a clear purp
 
 - `/briefing` — morning briefing assembling weather, meals, calendar, infrastructure health, and open tasks
 - `/research` — dispatches parallel search agents, gathers sources, synthesizes findings
-- `/cartography` — daily planning review with structured life-screen walkthrough
+- `/cartography` — daily planning review with structured priority walkthrough
 - `/end-session` — captures learnings, syncs state, ensures nothing is left uncommitted
 - `/retro` — monthly review of session learnings, proposes new skills and memory entries
 - `/learning-extractor` — classifies session learnings into actionable config patches
@@ -48,7 +48,7 @@ Skills need tools. I built 5 MCP servers exposing 110+ tools:
 | Server | Tools | Purpose |
 |--------|-------|---------|
 | homelab | 37 | Container ops, service health, media requests, search, vault access, Gmail, calendar |
-| remembrancer | 22 | Knowledge management, meal planning, career tracking, dashboard |
+| remembrancer | 22 | Knowledge management, planning, project tracking, dashboard |
 | n8n | 20 | Workflow automation management |
 | memory | 9 | Knowledge graph CRUD |
 | context7 | 2 | Library documentation lookup |
@@ -62,7 +62,7 @@ The homelab MCP server (~2,300 lines of JavaScript) wraps SSH, APIs, webhooks, a
 Multiple agents need shared context. I use three layers:
 
 1. **Knowledge graph** (persistent, structured): Entities and relations — services, patterns, decisions, people. Agents read from it; the end-of-session process updates it.
-2. **Vault** (persistent, documents): Markdown files organized by PARA method. Reports, research, career docs, daily notes. Agents can read and write directly.
+2. **Vault** (persistent, documents): Markdown files organized by PARA method. Reports, research, project docs, daily notes. Agents can read and write directly.
 3. **Session memory** (conversation-scoped): MEMORY.md loaded at start, updated as needed. Keeps the current session oriented without loading everything.
 
 This is the layer that makes multi-agent coordination work. When a research agent writes findings to the vault, a briefing agent can surface them the next morning. When an end-session agent captures a learning, the retro agent can propose a system change a month later.
@@ -92,7 +92,7 @@ These aren't manually written corrections — they're systematic. The feedback s
 
 ## Principles That Emerged
 
-1. **Separate Explore from Execute.** "Find" and "suggest" have no side effects. "Request" and "deploy" do. Never cross the boundary without confirmation. (Lago calls this "Constrain, Confirm, Exclude" — same instinct, different frame.)
+1. **Separate Explore from Execute.** "Find" and "suggest" have no side effects. "Request" and "deploy" do. Never cross the boundary without confirmation. (Some teams call this "Constrain, Confirm, Exclude" — same instinct, different frame.)
 
 2. **Verify Before Batch.** Never fire off N parallel operations assuming they'll all succeed. Test 1-2 first, inspect results, then batch the rest.
 

@@ -1,6 +1,6 @@
 ---
 name: briefing
-description: Morning briefing assembling data from 6+ parallel sources — weather, meals, calendar, infrastructure health, career metrics, and open tasks.
+description: Morning briefing assembling data from 6+ parallel sources — weather, meals, calendar, infrastructure health, project metrics, and open tasks.
 ---
 
 # Briefing
@@ -22,7 +22,7 @@ briefing_health()
 briefing_meals()
 briefing_meetings()
 briefing_tasks()
-briefing_career()
+briefing_projects()
 ```
 
 Each source is independent — if one fails, show the rest with a note.
@@ -46,8 +46,7 @@ Each source is independent — if one fails, show the rest with a note.
 **Infrastructure**: [healthy]/[total] services healthy
 [If any down]: Down: [service names]
 
-**Career**: [learning progress]
-[If 1:1 within 2 days]: 1:1 in [n] day(s) — prep [ready/NEEDED]
+**Projects**: [active work, blockers, progress]
 
 **Open Tasks** ([total]):
 - [task 1]
